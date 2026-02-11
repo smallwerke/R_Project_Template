@@ -1,0 +1,3 @@
+# great place to put any functions that might be referenced routinely... 
+#
+# JUST DON'T FORGET IF YOU EDIT FUNCTIONS IN THIS FILE YOU HAVE TO SAVE THE FILE & RUN THE source() COMMAND AGAIN FOR THEM TO BECOME USABLE!!!!

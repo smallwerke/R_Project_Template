@@ -1,0 +1,117 @@
+---
+title: "First Analysis"
+author: "Niels"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: true
+    theme: cerulean
+    syntax-highlighting: tango
+    df_print: paged # support for html table with pagination
+    code_folding: hide # have the R code (with echo TRUE) in the html but collapsed by default
+---
+
+```{css, echo=FALSE}
+.main-container {
+  max-width: 2400px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+```
+
+# Overview
+
+```{r fileTree, child="scripts/00-Files.txt", results="asis", eval=TRUE}
+```
+
+# Data Input and Setup
+
+## Libraries
+
+Inputing the needed libraries for this file. 
+
+```{r inputLibraries, message=FALSE, warning=FALSE}
+
+library(dplyr) # provides useful functions including %>% option...
+library(ggplot2)
+
+```
+
+## Paths
+
+Read in the needed data for this notebook.
+
+```{r setup, cache=FALSE, echo=FALSE}
+knitr::read_chunk(here::here("scripts", "01-Input_Data.R"))
+knitr::read_chunk(here::here("scripts", "02-Set_Aesthetics.R"))
+```
+
+Set the path locations.
+
+```{r set-location, echo=TRUE}
+```
+
+Set the script colors.
+
+```{r set-plot_vars, echo=TRUE}
+```
+
+## Functions
+
+```{r loadFunctions, eval=TRUE, echo=TRUE}
+# this also sets the tblMap and other basic table display variables used in this script...
+source(here::here("scripts", "03-Analysis_Functions.R"), local= knitr::knit_global())
+```
+
+## Data 
+
+Read in the R data that has been saved previously:
+
+```{r input-r_data, echo=TRUE}
+```
+
+# Results
+
+Since I'm just dumping default R data out I'm skipping any modeling or anlysis that would typically be happening and jumping directly to figures...
+
+```{r}
+data(iris)
+```
+
+## Figures {.tabset}
+
+Just doing this to show a useful *tabset* option to save space on a html output and allow quick review of related figures... Adding the tabset to the header above makes all subheads that follow tabs under this header.... This is escaped by the next '##' header...
+
+### Sepal
+
+Can specify how this code block displays the figures generated within by setting width & height...
+```{r, fig.width=12, fig.height=10}
+
+iris %>% ggplot(aes(y = Sepal.Length, x = Sepal.Width, color = Species, shape=Species)) +
+  geom_point(aes(size=Petal.Width)) + 
+  #geom_point() + 
+  labs(title="Sepal Length vs Width", y="Sepal Length", x = "Sepal Width") +
+  scale_color_manual(values=colors.diag) +  scale_shape_manual(values=shapes.diag) + theme_minimal() +
+  geom_density2d()  +
+  stat_ellipse(type="norm") + 
+  geom_smooth(method=lm, se=F) 
+
+```
+
+### Petal
+
+```{r, fig.width=12, fig.height=10 }
+
+iris %>% ggplot(aes(y = Petal.Length, x = Petal.Width, color = Species, shape=Species)) +
+  geom_point(aes(size=Sepal.Width)) + 
+  #geom_point() + 
+  labs(title="Petal Length vs Width", y="Petal Length", x = "Petal Width") +
+  scale_color_manual(values=colors.diag) +  scale_shape_manual(values=shapes.diag) + theme_minimal() +
+  geom_density_2d(contour_var = "density", bins=30)  + 
+  stat_ellipse(type="norm") + 
+  geom_smooth(method=lm, se=F) 
+
+```

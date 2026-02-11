@@ -1,0 +1,29 @@
+# standard RStudio project files to ignore
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Ignore EVERYTHING!!!!
+*
+
+# track this file..
+!.gitignore
+
+# track all *.Rmd files...
+!*.Rmd
+
+# allow html output files
+!*.html
+
+# track all *.R files
+!*.R
+
+# track all text files (there is one in the scripts dir)
+!*.txt
+
+# make sure NOT to forget directories... include all of them by default
+!*/
+
+# ignore any renv directory entirely
+renv/

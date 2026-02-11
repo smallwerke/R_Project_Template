@@ -1,0 +1,241 @@
+---
+title: "Read Me"
+author: "Niels"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: true
+    theme: cerulean
+    syntax-highlighting: tango
+    df_print: paged # support for html table with pagination
+    code_folding: hide # have the R code (with echo TRUE) in the html but collapsed by default
+---
+
+```{css, echo=FALSE}
+.main-container {
+  max-width: 2400px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+```
+
+# Overview
+
+```{r fileTree, child="scripts/00-Files.txt", results="asis", eval=TRUE}
+```
+
+# Project Setup in RStudio
+
+**This *Setup* section should only be needed once during project setup.** Follow the through the next two subsections (2.1 & 2.2) in order and you should have a RStudio project working *with* an renv managed R environment specific for that project. Subsection 2.3 contains various commands to install packages from different sources (CRAN, GitHub & bioconductor) as well as what is needed to maintain your environment and lockfile. The only thing to pay attention to from that point on is to make sure that RStudio is accessing the correct R version when you open your project (this is OS specific and discussed in the 'renv Setup' section).
+
+## RStudio Project Setup
+
+### Manual Copy / Paste
+
+There are many ways to setup a new project and get started. The one that I tried & *should* work is the following:
+
+To begin using this project template copy the following files & directories:
+
+- 00-ReadMe.Rmd
+- 01-Analysis_1.Rmd
+- scripts/ directory & the four files inside
+
+**Leave everything else behind** (the renv dir, renv.lock file, R_Project_Template.Rproj, and all hidden files)... 
+
+Into a directory where you would like to setup your R project. In RStudio select File -> New Project, in the window that opens select 'Existing Directory' and then browse to that directory. I would select 'Open in new session' and then create the project. By default the name of the project will copy your directory name.
+
+### GitHub clone
+
+Simply clone this github repository using the https link from github.com (shouldn't require authentication). In RStudio you can select `File -> New Project...` and then select `Version Control` from the popup window. Enter in the http link from github as the url, select the folder you would like to clone this project into and either leave the name blank (in which case it will use the name of this repo 'R_Project_Template') or provide a name for your project. Clone this repo and then fork it so you can track changes on your work or just leave it as a cloned repository.
+
+**If you are going to use github to track your project make sure to check the `.gitignore` file as you likely do not want to be uploading all of your data files to github...** I have included a restrictive `.gitignore` with this project that only tracks \*.Rmd, \*.R, and \*.txt files and explicitly ignores any renv/ folder...
+
+## renv Setup and Initialization
+
+This project is using [renv](https://rstudio.github.io/renv/) to manage the packages which records information about all installed packages to a *lockfile* that enables relatively easy generation of a duplicate environment by other users ***and*** reversion to a known stable setup by you if you haven't updated the lockfile. All packages will, by default, be installed within a renv directory in the project directory and will not be using the installed packages connected to this version of R.
+
+**This will not manage the version of R that you have installed!** For Mac I am using [RSwitch](https://rud.is/rswitch/) to manage the different R installations that I have as *Mac defaults to replacing your existing install of R with a new one*. Windows, by default, will simply install the new version of R alongside existing versions and you can switch which version you are running in RStudio (Tools -> Global Options -> R Version) and click *Change...* to select a different installed version of R. Make sure you have the correct version of R running in your RStudio that matches with your project, *renv might try to adapt to a different version of R but this isn't ideal.* Not having Windows I am also not sure if RStudio will switch to the version of R used in your specific project or not... This is something to pay attention to. RStudio does print to console the version of R that is it using whenever it starts.
+
+**For the following steps I have included corresponding code with commentary in the following three code blocks:** 
+
+- `envINIT` code block is **not** run during file knit (eval=FALSE) but the contents are included in the knit html file (echo=TRUE).
+- `envMaint` code block is **not** run during file knit and has various commands for installing packages and updating the lockfile & environment
+- `envStatus` code block **is** run during file knit and prints out environment status information
+
+**Overview of the init & maintenance process for your renv:**
+
+*demo code is included in the following three code blocks in this section*
+
+- **install *renv* package:** will provide access to the renv package for environment management
+    - *should* only required once per R version on your system
+- **initiate *renv*:** this will setup renv in your project directory and search for needed R packages
+    - for this template it should find & install knitr & here (required above in this file) and RColorBrewer (in scripts/02-Set_Aesthetics.R) among other requirements and dependencies
+    - these will all be installed in the *renv* folder in your project directory
+    - a 'lockfile' will be generated detailing all installed packages, their version, source, etc which *should* make copying this setup relatively easy for most cases
+- you can now use `renv::install()` to install packages allowing for easy version selection
+    - `install.packages()` is still valid and will be noticed by renv
+    - if you included bioconductor (recommended) during renv::init (details below) renv *should* also recognize BiocManager::install() commands...
+- **running a R project on a mounted / shared disk on Mac OS has a few complications!**
+    - mounting a drive on Mac will trigger greater security scrutiny from the OS and you will have to manually allow a long list of files to be executed which requires a restart of RStudio *each time*, the files are `*.so` files and require going to your OS's 'Settings -> Privacy & Security -> Security' and allow the blocked `.so` file which is only possible after it is blocked and a warning message thrown... After you allow that .so file RStudio will typically crash and require a restart, Mac will prompt you for your password to allow this scare .so file to run and then hang on the next .so file which you will have to allow and go through this again... It *should* remember your exemptions and not go through this again BUT installing new packages may well add new .so files so be prepared...
+    - one other option is to run files locally on the Mac and use cron jobs to rsync the scripts and other valuable data to the shared drive, I have bash scripts for this very purpose for anyone interested...
+- **save renv:** when you are happy with newly installed packages use `renv::snapshot()` to update your lockfile
+    - until you do this you will get warning messages that *renv* is out of sync ***this is not a big deal***
+    - once you save the current renv that is the environment you are able to revert to with `renv::restore()` so try to make sure that you are happy with the newly installed package/s and that there are no conflicts...
+        - one way to reduce conflicts is to include the package name in your function calls (e.g. ggplot2::ggplot() instead of ggplot()) which is a good first step if you run into issues...
+
+**The following code is not run when knitting this file (as it is only needed for initial renv init & package installs).**
+```{r envINIT, echo=TRUE, eval=FALSE}
+# Install renv:
+install.packages("renv") # will be required IF renv has not yet been installed for this version of R...
+
+# Initialize the environment:
+renv::init(bioconductor = TRUE) # probably common / wise to go ahead and include the latest bioconductor in the R environment setup...
+# should then be able to install packages with BiocManager::install("DESeq2") # From Bioconductor (or renv::install("DESeq2"))
+#renv::init(bioconductor = "3.14") # in case a specific version is required...
+#renv::init() # initial init of renv... this will attempt to install any needed packages without bioconductor...
+
+# this should install all required packages, some common requirements for knitting them Rmd files 
+# are the following (if you don't have them installed RStudio will throw an error message requesting they be installed)
+# there is a decent chance that renv will install some or all of these when you run renv::init but 
+# 're'installing them shouldn't hurt anything...
+renv::install("glue", "magrittr", "stringi", "stringr")
+
+
+```
+
+## renv Maintenance
+
+Once the renv is installed and running you can check on its status and see what packages are coming from where. **After you install a new package anywhere within your project you should start getting messages that renv is "out of sync".** To address this run `renv::snapshot()` which will replaced your current lockfile with your current state. Only do this if you are satisfied with all installed packages for this project. `renv::restore()` is what you would use when setting up this project in a new location (the same version of R and the 'renv.lock' file are required for this to work) **or** you ran into issues and want to revert to the environment state defined in your lockfile (so whatever it was at when you last ran snapshot())...
+
+**The following is not run when knitting as you don't want to randomly run snapshot or resotre...**
+```{r envMgmt, echo=TRUE, eval=FALSE}
+
+#############################################
+# Basic package install from CRAN:
+#
+# renv::install("ggplot")  # or install.packages("ggplot")
+
+#############################################
+# Version specific install:
+#
+# specific versions of packages may need to be installed for your work and that can, at times, require troubleshooting
+# basic, version specific install of a package:
+#renv::install("Matrix@1.6-0")
+
+#############################################
+# Resolving dependency issues
+#
+# certain packages might have specific dependencies that don't successfully auto resolve... 
+# PResiduals was one with less than helpful error messages...
+# installing a specific rms allowed the install of PResiduals to proceed:
+#renv::install("rms@6.8-1")
+#renv::install("PResiduals@1.0-1")
+
+#############################################
+# Install packages from GitHub:
+#
+# non CRAN installations are valid, devtools allows for easy install from packages on github
+# e.g. DEswan package for sliding window analysis
+#renv::install("devtools") # in case devtools is not already installed...
+#library(devtools)
+#devtools::install_github("lehallib/DEswan",build_vignettes = T)
+
+#############################################
+# Install packages from bioconductor
+#
+# proteomics analysis package from bioconductor (https://pathview.r-forge.r-project.org/)
+# this should install pathview & all dependencies easily IF bioconductor was enabled on renv::init
+#renv::install("pathview")
+
+#############################################
+# renv status check and lockfile update
+#
+# commands to check the status of renv and either update the lockfile OR restore the environment to the lockfile...
+renv::status() # get a status of the packages
+renv::dependencies() # see what dependencies exist in the project...
+#renv::snapshot() # to update the env lockfile
+#renv::restore() # to install the packages & versions from the lockfile... also good for when moving project to another directory...
+
+```
+
+## renv Status
+
+Run through the envINIT block above to setup renv for this project and then the following block should be more useful.
+
+The following is run when knitting this file as it prints out useful details about your *renv*.
+```{r envStatus, echo=TRUE, eval=TRUE}
+
+renv::status() # get a status of the packages
+
+cat(paste0("the different libraries used in this project:\n", 
+           paste0(.libPaths(), collapse = "\n"), 
+           "\nand the packages in each respective library:\n")) # see where the packages are being stored
+
+# will print useful output ONCE renv is setup for this project:
+
+#lapply(.libPaths(), list.files) # see what is being pulled from each location (project & base)
+
+#renv::dependencies() # see what dependencies exist in the project...
+
+```
+
+# Data Input
+Read in the needed data for this notebook.
+
+```{r setup, cache=FALSE, echo=FALSE, eval=TRUE}
+knitr::read_chunk(here::here("scripts", "01-Input_Data.R"))
+```
+
+Set the path locations.
+```{r set-location, echo=TRUE, eval=TRUE}
+```
+
+# Project Setup
+
+**This section is largely describing how I setup the previous project** (clinical biomarkers) and you will likely end up changing how you configure things for your work... I am providing a brief overview of the setup, parts of which, could be useful for your setup (primarily the scripts/ folder and having your data paths defined in one location to make transfer / sharing relatively easy).
+
+This folder contains the R scripts used to process the data for this project. The scritps are backed up every 30 minutes to the Schafer Lab share drive on the Mayo network *when the drive is mounted*. The R environment files **and** the clinical data files are **NOT** included in this backup... The various data files generated by these scripts (.rda, .csv, etc.) are similarly not copied over to the share drive. This is in large part due to the size some of the files take up **AND** that they potentially contain protected patient information. Out of an abundance of caution I am not sending these to the lab's share drive under the assumption that the files and these scripts can reproduce all output within a few days of compute time...
+
+This file just contains general information - **NO** data processing is taking place here.
+
+## Primary Directory Locations
+
+- clinical data unprocessed:
+  - `r paste0(pathLaptop, pathLaptop.clin)`
+- project data R format *including processed analysis files*:
+  - `r paste0(pathLaptop, pathLaptop.rData)` 
+- **SHARED data** *primarily scripts and select output*:
+  - `r paste0(pathShare)`
+  
+## Data Location and Functions
+
+A few scripts exist that provide project-wide utility: manage the location for all data within the markdown files allowing for relatively easy relocation of the scripts and contain functions that are used repeatedly throughout some of the markdown files.
+
+- `scripts/01-Input_Data.R` contains all of the various path & file locations for input & output of data. This ***should*** be the only location that deals with path & file names, ***including*** for this script...
+- `scripts/02-Set_Aesthetics.R` colors, labels, shape settings etc. that can be loaded for ggplot figures to provide consistency between figures and reduce the amount of edits when changing certain aesthetics...
+
+## Script Functions
+
+These files contain the actual analysis of the data:
+
+- `00-Read_Me` This overview file...
+- `01-Analysis_1`  Template markdown file to get the actual work started...
+
+# System Details
+
+*Should be* running R 4.5.1... 
+
+`r version`
+
+## Session Info
+
+Full Session info (can be a lot *but* it is useful if you ever have to troubleshoot errors...). I typically put this at the bottom of this file as a reference just in case:
+``` {r sessionDets, eval=TRUE, echo=TRUE}
+
+# extensive info:
+sessionInfo()
+     
+```
