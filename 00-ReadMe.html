@@ -2839,7 +2839,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Read Me</h1>
 <h4 class="author">Niels</h4>
-<h4 class="date">11 February, 2026</h4>
+<h4 class="date">19 February, 2026</h4>
 
 </div>
 
@@ -2903,8 +2903,22 @@ github.com (shouldn’t require authentication). In RStudio you can select
 link from github as the url, select the folder you would like to clone
 this project into and either leave the name blank (in which case it will
 use the name of this repo ‘R_Project_Template’) or provide a name for
-your project. Clone this repo and then fork it so you can track changes
-on your work or just leave it as a cloned repository.</p>
+your project. Clone this repo and then you can switch over to your own
+repository to keep on working (assuming you would like to use git -
+<strong>if you don’t care about git you can just ignore the following
+and keep working</strong>).</p>
+<p>To switch from this project to your own I think the easiest path is
+to create a repository and then switch over to it. Create your
+<strong>empty</strong> repository on github.com or gitlab.com. The
+important part of it being <strong>empty</strong> is that it will not
+have a history and so a merge or rebase won’t be required! All you have
+to do is switch the origin repo and push: <strong><em>from the
+terminal:</em></strong></p>
+<ul>
+<li>$ git remote set-url origin [new_url_ssh]</li>
+<li>$ git branch -M main</li>
+<li>$ git push -u origin main</li>
+</ul>
 <p><strong>If you are going to use github to track your project make
 sure to check the <code>.gitignore</code> file as you likely do not want
 to be uploading all of your data files to github…</strong> I have
@@ -3232,7 +3246,7 @@ this file as a reference just in case:</p>
 sessionInfo()</code></pre>
 <pre><code>## R version 4.5.1 (2025-06-13)
 ## Platform: aarch64-apple-darwin20
-## Running under: macOS Sequoia 15.7.3
+## Running under: macOS Sequoia 15.7.4
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
@@ -3248,12 +3262,12 @@ sessionInfo()</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] digest_0.6.37     R6_2.6.1          fastmap_1.2.0     xfun_0.53        
-##  [5] cachem_1.1.0      knitr_1.50        htmltools_0.5.8.1 rmarkdown_2.30   
-##  [9] lifecycle_1.0.4   cli_3.6.5         sass_0.4.10       renv_1.1.6       
+##  [1] digest_0.6.39     R6_2.6.1          fastmap_1.2.0     xfun_0.56        
+##  [5] cachem_1.1.0      knitr_1.51        htmltools_0.5.9   rmarkdown_2.30   
+##  [9] lifecycle_1.0.5   cli_3.6.5         sass_0.4.10       renv_1.1.6       
 ## [13] jquerylib_0.1.4   compiler_4.5.1    rprojroot_2.1.1   here_1.0.2       
-## [17] rstudioapi_0.17.1 tools_4.5.1       evaluate_1.0.5    bslib_0.9.0      
-## [21] yaml_2.3.10       rlang_1.1.6       jsonlite_2.0.0</code></pre>
+## [17] rstudioapi_0.18.0 tools_4.5.1       evaluate_1.0.5    bslib_0.10.0     
+## [21] yaml_2.3.12       otel_0.2.0        jsonlite_2.0.0    rlang_1.1.7</code></pre>
 </div>
 </div>
 

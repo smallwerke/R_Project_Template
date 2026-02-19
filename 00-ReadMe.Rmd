@@ -49,7 +49,13 @@ Into a directory where you would like to setup your R project. In RStudio select
 
 ### GitHub clone
 
-Simply clone this github repository using the https link from github.com (shouldn't require authentication). In RStudio you can select `File -> New Project...` and then select `Version Control` from the popup window. Enter in the http link from github as the url, select the folder you would like to clone this project into and either leave the name blank (in which case it will use the name of this repo 'R_Project_Template') or provide a name for your project. Clone this repo and then fork it so you can track changes on your work or just leave it as a cloned repository.
+Simply clone this github repository using the https link from github.com (shouldn't require authentication). In RStudio you can select `File -> New Project...` and then select `Version Control` from the popup window. Enter in the http link from github as the url, select the folder you would like to clone this project into and either leave the name blank (in which case it will use the name of this repo 'R_Project_Template') or provide a name for your project. Clone this repo and then you can switch over to your own repository to keep on working (assuming you would like to use git - **if you don't care about git you can just ignore the following and keep working**).
+
+To switch from this project to your own I think the easiest path is to create a repository and then switch over to it. Create your **empty** repository on github.com or gitlab.com. The important part of it being **empty** is that it will not have a history and so a merge or rebase won't be required! All you have to do is switch the origin repo and push: ***from the terminal:***
+
+- $ git remote set-url origin [new_url_ssh]
+- $ git branch -M main
+- $ git push -u origin main
 
 **If you are going to use github to track your project make sure to check the `.gitignore` file as you likely do not want to be uploading all of your data files to github...** I have included a restrictive `.gitignore` with this project that only tracks \*.Rmd, \*.R, and \*.txt files and explicitly ignores any renv/ folder...
 
