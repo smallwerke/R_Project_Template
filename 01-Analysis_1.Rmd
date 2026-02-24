@@ -37,6 +37,9 @@ Inputing the needed libraries for this file.
 
 library(dplyr) # provides useful functions including %>% option...
 library(ggplot2)
+library(histova)
+
+# devtools::install_github("smallwerke/histova") # install the package
 
 ```
 
@@ -84,6 +87,17 @@ data(iris)
 ## Figures {.tabset}
 
 Just doing this to show a useful *tabset* option to save space on a html output and allow quick review of related figures... Adding the tabset to the header above makes all subheads that follow tabs under this header.... This is escaped by the next '##' header...
+
+### histova
+
+Implementation of [histova](https://github.com/smallwerke/histova): a basic histogram + ANOVA tool I put together. This is designed less for a markdown file but more for ability to use text based data input files to generate histograms where changing the appearance settings in one file can be transferred to all subsequent files for consistency. The project is still under active development to enable modification of settings, saving of settings, and toggling log output for better markdown display...
+```{r, eval=TRUE, echo=TRUE }
+
+d = getwd()
+f = "test-1_group-ANOVA_scatter_outlier.txt"
+
+generate_figure(d,f, printPlot = TRUE, savePlot = FALSE, saveLog = FALSE)
+```
 
 ### Sepal
 
