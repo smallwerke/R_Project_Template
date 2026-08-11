@@ -107,7 +107,7 @@ renv::init(bioconductor = TRUE) # probably common / wise to go ahead and include
 # are the following (if you don't have them installed RStudio will throw an error message requesting they be installed)
 # there is a decent chance that renv will install some or all of these when you run renv::init but 
 # 're'installing them shouldn't hurt anything...
-renv::install("glue", "magrittr", "stringi", "stringr")
+renv::install("glue", "here", "knitr", "magrittr", "rmarkdown", "stringi", "stringr")
 
 
 ```
