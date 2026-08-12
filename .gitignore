@@ -1,7 +1,7 @@
-# standard RStudio project files to ignore
-.Rproj.user
-.Rhistory
+# standard RStudio project files to ignore, just to be explicit...
 .RData
+.Rhistory
+.Rprofile
 .Ruserdata
 
 # Ignore EVERYTHING!!!!
@@ -9,6 +9,12 @@
 
 # track this file..
 !.gitignore
+
+# track the license
+!LICENSE
+
+# track all markdown files
+!*.md
 
 # track all *.Rmd files...
 !*.Rmd
@@ -27,3 +33,4 @@
 
 # ignore any renv directory entirely
 renv/
+.Rproj.user/

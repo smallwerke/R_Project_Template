@@ -31,6 +31,10 @@ output:
 
 **This *Setup* section should only be needed once during project setup.** Follow the through the next two subsections (2.1 & 2.2) in order and you should have a RStudio project working *with* an renv managed R environment specific for that project. Subsection 2.3 contains various commands to install packages from different sources (CRAN, GitHub & bioconductor) as well as what is needed to maintain your environment and lockfile. The only thing to pay attention to from that point on is to make sure that RStudio is accessing the correct R version when you open your project (this is OS specific and discussed in the 'renv Setup' section).
 
+## R Markdown
+
+Website for putting RMarkdown files into [various formats](https://rmarkdown.rstudio.com/lesson-11.html) including slide options with [pdf](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html) or [powerpoint](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html) versions. There is also a page detailing [chunk options](https://yihui.org/knitr/options/).
+
 ## RStudio Project Setup
 
 ### Manual Copy / Paste
@@ -51,13 +55,35 @@ Into a directory where you would like to setup your R project. In RStudio select
 
 Simply clone this github repository using the https link from github.com (shouldn't require authentication). In RStudio you can select `File -> New Project...` and then select `Version Control` from the popup window. Enter in the http link from github as the url, select the folder you would like to clone this project into and either leave the name blank (in which case it will use the name of this repo 'R_Project_Template') or provide a name for your project. Clone this repo and then you can switch over to your own repository to keep on working (assuming you would like to use git - **if you don't care about git you can just ignore the following and keep working**).
 
-To switch from this project to your own I think the easiest path is to create a repository and then switch over to it. Create your **empty** repository on github.com or gitlab.com. The important part of it being **empty** is that it will not have a history and so a merge or rebase won't be required! All you have to do is switch the origin repo and push: ***from the terminal:***
+To switch from this project to your own I think the easiest path is to create a repository and then switch over to it. Create your **empty** repository on github.com or gitlab.com. The important part of it being **empty** is that it will not have a history and so a merge or rebase won't be required! All you have to do is switch the origin repo and push: ***from the terminal*** *yes this can be done from within the RStudio terminal tab as long as you are in your project/git root folder!*:
 
 - $ git remote set-url origin [new_url_ssh]
 - $ git branch -M main
 - $ git push -u origin main
 
-**If you are going to use github to track your project make sure to check the `.gitignore` file as you likely do not want to be uploading all of your data files to github...** I have included a restrictive `.gitignore` with this project that only tracks \*.Rmd, \*.R, and \*.txt files and explicitly ignores any renv/ folder...
+**If you are going to use github to track your project make sure to check the `.gitignore` file as you likely do not want to be uploading all of your data files to github...** I have included a restrictive `.gitignore` with this project that tracks:
+
+- all `\*.md`, `\*.Rmd`, \*.html, \*.R, and \*.txt files 
+- `.gitignore`
+- all subdirectories!
+    - **BUT not:** `renv/` & `.Rproj.user/`
+    
+**To Note:**
+
+Editing the `.gitignore` file to remove, for example, the `LICENSE` file will **not** remove this file from this git repo as it is already being staged. You can view a list of all staged files with this repo using the terminal command:
+
+`git ls-files --stage`
+
+Files can be removed from being staged using the following commands *after which the `.gitignore` rules will work as expected*:
+
+
+`git rm --cached [file/dir]`
+
+`git commit -m "delete file from repo only"`
+
+`git push origin main`
+
+*Alternatively you can leave out the `--cached` and it will delete the file/dir from BOTH the local filesystem/hard drive AND the repo...*
 
 ## renv Setup and Initialization
 
