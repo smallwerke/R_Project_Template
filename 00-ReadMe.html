@@ -2839,7 +2839,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Read Me</h1>
 <h4 class="author">Niels</h4>
-<h4 class="date">12 August, 2026</h4>
+<h4 class="date">30 September, 2026</h4>
 
 </div>
 
@@ -2956,7 +2956,7 @@ expected</em>:</p>
 <p><code>git commit -m &quot;delete file from repo only&quot;</code></p>
 <p><code>git push origin main</code></p>
 <p><em>Alternatively you can leave out the <code>--cached</code> and it
-will delete the file/dir from both the local filesystem/hard drive AND
+will delete the file/dir from BOTH the local filesystem/hard drive AND
 the repo…</em></p>
 </div>
 </div>
@@ -3081,7 +3081,7 @@ renv::init(bioconductor = TRUE) # probably common / wise to go ahead and include
 # are the following (if you don&#39;t have them installed RStudio will throw an error message requesting they be installed)
 # there is a decent chance that renv will install some or all of these when you run renv::init but 
 # &#39;re&#39;installing them shouldn&#39;t hurt anything...
-renv::install(&quot;glue&quot;, &quot;magrittr&quot;, &quot;stringi&quot;, &quot;stringr&quot;)</code></pre>
+renv::install(&quot;glue&quot;, &quot;here&quot;, &quot;knitr&quot;, &quot;magrittr&quot;, &quot;rmarkdown&quot;, &quot;stringi&quot;, &quot;stringr&quot;)</code></pre>
 </div>
 <div id="renv-maintenance" class="section level2" number="2.4">
 <h2><span class="header-section-number">2.4</span> renv Maintenance</h2>
@@ -3165,6 +3165,26 @@ details about your <em>renv</em>.</p>
 #lapply(.libPaths(), list.files) # see what is being pulled from each location (project &amp; base)
 
 #renv::dependencies() # see what dependencies exist in the project...</code></pre>
+</div>
+<div id="renv-dependency-management" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> renv Dependency
+Management</h2>
+<p>In a larger project scanning all files &amp; folders for dependencies
+<code>renv::dependencies()</code> can start taking enough time to throw
+a warning (<a href="https://rstudio.github.io/renv/articles/faq.html">FAQ</a>). If you
+want to explicitely remove certain folders from being scanned simply
+include them in a <code>.renvignore</code> file and they won’t be
+scanned.</p>
+<p>Alternatively you can manage the dependencies explicitly with a
+<code>DESCRIPTION</code> file and set renv to stop scanning for
+dependencies with <code>renv::settings$snapshot.type(&quot;explicit&quot;)</code>.
+This requires manual update of the <code>DESCRIPTION</code> file
+whenever you install a package that you would like to be included in the
+project’s renv…</p>
+<p>It is also possible to simply go off of all of the packages
+<em>installed</em> into your renv instead of searching R related files
+for any calls that load packages by setting:
+<code>renv::settings$snapshot.type(&quot;all&quot;)</code>.</p>
 </div>
 </div>
 <div id="data-input" class="section level1" number="3">
@@ -3279,7 +3299,7 @@ this file as a reference just in case:</p>
 sessionInfo()</code></pre>
 <pre><code>## R version 4.5.2 (2025-10-31)
 ## Platform: aarch64-apple-darwin20
-## Running under: macOS Sequoia 15.7.8
+## Running under: macOS Sequoia 15.8
 ## 
 ## Matrix products: default
 ## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
