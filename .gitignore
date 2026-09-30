@@ -28,6 +28,9 @@
 # track all text files (there is one in the scripts dir)
 !*.txt
 
+# add the renv specific ignore file...
+!.renvignore
+
 # make sure NOT to forget directories... include all of them by default
 !*/
 

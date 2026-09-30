@@ -214,6 +214,14 @@ cat(paste0("the different libraries used in this project:\n",
 
 ```
 
+## renv Dependency Management
+
+In a larger project scanning all files & folders for dependencies `renv::dependencies()` can start taking enough time to throw a warning ([FAQ](https://rstudio.github.io/renv/articles/faq.html)). If you want to explicitely remove certain folders from being scanned simply include them in a `.renvignore` file and they won't be scanned. 
+
+Alternatively you can manage the dependencies explicitly with a `DESCRIPTION` file and set renv to stop scanning for dependencies with `renv::settings$snapshot.type("explicit")`. This requires manual update of the `DESCRIPTION` file whenever you install a package that you would like to be included in the project's renv...
+
+It is also possible to simply go off of all of the packages *installed* into your renv instead of searching R related files for any calls that load packages by setting: `renv::settings$snapshot.type("all")`.
+
 # Data Input
 Read in the needed data for this notebook.
 
